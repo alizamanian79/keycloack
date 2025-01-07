@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  serverapp:
+    de
+    image: spring-app:latest
+    container_name: app
+    ports:
+      - "8081:8081"  # Adjust port mapping as needed
+    networks:
+      - my_network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0.7
+    container_name: keycloak_container
+    environment:
+      - KEYCLOAK_USER=admin  # Set admin user
+      - KEYCLOAK_PASSWORD=admin  # Set admin password
+    ports:
+      - "8080:8080"  # Adjust port mapping as needed
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
