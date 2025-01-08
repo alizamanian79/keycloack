@@ -3,8 +3,10 @@ package com.example.demo.controller;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -25,5 +27,13 @@ public class DemoController {
     public String hello2() {
         return "Hello from Spring boot & Keycloak - ADMIN";
     }
+
+
+    @GetMapping("/gettoken")
+    @PreAuthorize("hasAnyRole('client_admin')")
+    public Jwt testtoken(@AuthenticationPrincipal Jwt jwt) {
+        return jwt;
+    }
+
 
 }
