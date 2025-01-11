@@ -22,18 +22,7 @@ public class DemoController {
         return "Hello from Spring boot & Keycloak";
     }
 
-    @GetMapping("/hello-2")
-    @PreAuthorize("hasRole('client_admin')")
-    public String hello2() {
-        return "Hello from Spring boot & Keycloak - ADMIN";
-    }
 
-
-    @GetMapping("/gettoken")
-    @PreAuthorize("hasAnyRole('client_admin')")
-    public Jwt testtoken(@AuthenticationPrincipal Jwt jwt) {
-        return jwt;
-    }
 
 
 }
