@@ -1,0 +1,12 @@
+{
+  "realm": "hovitarealms",
+  "auth-server-url": "http://localhost:8080/",
+  "ssl-required": "external",
+  "resource": "hovita-cli",
+  "verify-token-audience": true,
+  "credentials": {
+    "secret": "H9ZbJAX1PlMnkwVD2R5y0zsO9C7w4MZQ"
+  },
+  "use-resource-role-mappings": true,
+  "confidential-port": 0
+}
