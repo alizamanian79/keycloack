@@ -14,3 +14,8 @@ jwt:
     converter:
       resource-id: hovita-cli
       principle-attribute: preferred_username
+
+keycloack:
+  realmName: hovitarealms
+  clientId: hovita-cli
+  grantType: password

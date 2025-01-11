@@ -8,6 +8,8 @@ import org.springframework.security.web.SecurityFilterChain;
 
 
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -41,5 +43,13 @@ public class SecurityConfiguration {
                 .sessionCreationPolicy(STATELESS);
 
         return http.build();
+    }
+    @Bean
+    public WebClient.Builder webClientBuilder() {
+        return WebClient.builder();
+    }
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }
