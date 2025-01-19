@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import java.io.IOException;
+import java.util.Map;
 
 
 @RestController
@@ -31,7 +32,7 @@ public class UserController {
 
     @PostMapping("/signin")
 //    @PreAuthorize("hasAnyRole('client-admin')")
-    public String token(@RequestBody SigninDto signinDto){
+    public Map token(@RequestBody SigninDto signinDto){
     return userService.getToken(signinDto);
     }
 

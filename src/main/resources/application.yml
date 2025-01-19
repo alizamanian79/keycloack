@@ -15,9 +15,12 @@ jwt:
       principle-attribute: preferred_username
 
 keycloack:
-  realmName: myrealm
+  realm: myrealm
   grant-type: password
   client-id: admin-cli
   client-secret: 3AlxlutPKMpYon2PxwbWGU9jj729G19A
   username: ali
   password: 1234
+  ipAddress: http://localhost:8080
+  endpoints:
+    token: ${keycloack.ipAddress}/realms/${keycloack.realm}/protocol/openid-connect/token

@@ -2,6 +2,7 @@ package com.application.server.service;
 
 import com.application.server.dto.keycloackDto.SigninDto;
 import com.application.server.dto.keycloackDto.SignupDto;
+import com.nimbusds.jose.shaded.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -18,7 +19,7 @@ import java.util.Map;
 @Service
 public class UserService {
 
-    @Value("${keycloack.realmName}")
+    @Value("${keycloack.realm}")
     private String realm;
 
     @Value("${keycloack.client-id}")
@@ -39,12 +40,14 @@ public class UserService {
     @Value("${keycloack.password}")
     private String password;
 
+    @Value("${keycloack.endpoints.token}")
+    private String tokenEndpoint;
 
     @Autowired
     private RestTemplate restTemplate;
 
-    public String getToken(SigninDto signinDto) {
-        String url = "http://localhost:8080/realms/myrealm/protocol/openid-connect/token";
+    public Map getToken(SigninDto signinDto) {
+        String url = tokenEndpoint;
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -68,7 +71,8 @@ public class UserService {
             ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, request, Map.class);
             // Check if the response body is not null and contains the access_token
             if (response.getBody() != null && response.getBody().containsKey("access_token")) {
-                return (String) response.getBody().get("access_token");
+
+                return response.getBody();
             }
         } catch (Exception e) {
             // Handle exceptions appropriately (e.g., log the error)
@@ -85,14 +89,13 @@ public class UserService {
         signinDto.setPassword(password);
 
         // Get the token (ensure `getToken` works properly)
-        String token = getToken(signinDto);
+        Map data =getToken(signinDto);
+        String token = data.get("access_token").toString();
         if (token == null || token.isEmpty()) {
             System.out.println("Failed to fetch token.");
             return null;
         }
-
-
-
+        
 
         // REST API URL for creating users
         String url = "http://localhost:8080/admin/realms/myrealm/users";
