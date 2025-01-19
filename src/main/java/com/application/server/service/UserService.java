@@ -216,6 +216,40 @@ public class UserService {
 
 
     }
+
+    public ResponseEntity<?> deleteUser(String id, String token) {
+        // REST API URL for creating users
+        String url = usersEndpoint+"/"+id;
+        RestTemplate restTemplate = new RestTemplate();
+
+        // Setting up headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON); // JSON for creating users
+        headers.set("Authorization", "Bearer " + token);
+
+        // Wrapping the payload in HttpEntity
+
+        HttpEntity<String> request = new HttpEntity<>(headers);
+
+        try {
+            // Sending the POST request
+            ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.DELETE, request, Map.class);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                System.out.println("User successfully created.");
+                return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
+            } else {
+                System.out.println("Failed to create user: " + response.getBody());
+                return new ResponseEntity<>(response.getBody(), HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            // Handle exceptions appropriately
+            System.err.println("Error occurred during signup: " + e.getMessage());
+            return null;
+        }
+    }
+
+
     // Return null if user creation fails
 
 
