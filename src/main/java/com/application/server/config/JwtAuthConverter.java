@@ -34,7 +34,8 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
     public AbstractAuthenticationToken convert(@NonNull Jwt jwt) {
         Collection<GrantedAuthority> authorities = Stream.concat(
                 jwtGrantedAuthoritiesConverter.convert(jwt).stream(),
-                extractResourceRoles(jwt).stream()
+
+                extractResourceRoles(jwt).stream() // Change Wich role u want
         ).collect(Collectors.toSet());
 
         return new JwtAuthenticationToken(
@@ -52,6 +53,7 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
         return jwt.getClaim(claimName);
     }
 
+    // Client Role
     private Collection<? extends GrantedAuthority> extractResourceRoles(Jwt jwt) {
         Map<String, Object> resourceAccess;
         Map<String, Object> resource;
@@ -72,4 +74,25 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                 .collect(Collectors.toSet());
     }
+
+    // Realm Role
+    // point : if change to Realm roles ,
+    // your authorization annotation should be like realms role
+
+
+//    private Collection<? extends GrantedAuthority> extractRealmRoles(Jwt jwt) {
+//        if (jwt.getClaim("realm_access") == null) {
+//            return Set.of();
+//        }
+//        Map<String, Object> realmAccess = jwt.getClaim("realm_access");
+//        Collection<String> realmRoles = (Collection<String>) realmAccess.get("roles");
+//
+//        return realmRoles
+//                .stream()
+//                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+//                .collect(Collectors.toSet());
+//    }
+
+
+
 }
