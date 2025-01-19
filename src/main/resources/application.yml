@@ -25,4 +25,4 @@ keycloack:
   endpoints:
     token: ${keycloack.ipAddress}/realms/${keycloack.realm}/protocol/openid-connect/token
     userInfo: ${keycloack.ipAddress}/realms/${keycloack.realm}/protocol/openid-connect/userinfo
-    users:
+    users: ${keycloack.ipAddress}/admin/realms/${keycloack.realm}/users

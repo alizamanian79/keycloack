@@ -11,6 +11,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,10 +47,13 @@ public class UserService {
     @Value("${keycloack.endpoints.userInfo}")
     private String userInfoEndpoint;
 
+    @Value("${keycloack.endpoints.users}")
+    private String usersEndpoint;
+
     @Autowired
     private RestTemplate restTemplate;
 
-    public Map getToken(SigninDto signinDto) {
+    public Map signIn(SigninDto signinDto) {
         String url = tokenEndpoint;
         RestTemplate restTemplate = new RestTemplate();
 
@@ -93,7 +97,7 @@ public class UserService {
         signinDto.setPassword(password);
 
         // Get the token (ensure `getToken` works properly)
-        Map data =getToken(signinDto);
+        Map data =signIn(signinDto);
         String token = data.get("access_token").toString();
         if (token == null || token.isEmpty()) {
             System.out.println("Failed to fetch token.");
@@ -102,7 +106,7 @@ public class UserService {
 
 
         // REST API URL for creating users
-        String url = "http://localhost:8080/admin/realms/myrealm/users";
+        String url = usersEndpoint;
         RestTemplate restTemplate = new RestTemplate();
 
         // Setting up headers
@@ -180,6 +184,42 @@ public class UserService {
         return null; // Return null if user creation fails
     }
 
+    public ResponseEntity<?> users (String token) {
+        // REST API URL for creating users
+        String url = usersEndpoint;
+        RestTemplate restTemplate = new RestTemplate();
+
+        // Setting up headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON); // JSON for creating users
+        headers.set("Authorization", "Bearer " + token);
+
+        // Wrapping the payload in HttpEntity
+        HttpEntity<List<Map<String,Object>>> request = new HttpEntity<>(headers);
+
+        try {
+            // Sending the POST request
+            ResponseEntity<List> response = restTemplate.exchange(url, HttpMethod.GET, request, List.class);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                System.out.println("User successfully created.");
+                return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
+            } else {
+                System.out.println("Failed to create user: " + response.getBody());
+                return new ResponseEntity<>(response.getBody(), HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            // Handle exceptions appropriately
+            System.err.println("Error occurred during signup: " + e.getMessage());
+            return null;
+        }
+
+
+    }
+    // Return null if user creation fails
+
+
+}
 
 
 
@@ -249,4 +289,4 @@ public class UserService {
 //
 //        return new ResponseEntity<>(response, HttpStatus.OK);
 //    }
-}
+

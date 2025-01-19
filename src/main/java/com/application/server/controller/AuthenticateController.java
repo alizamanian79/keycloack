@@ -18,29 +18,36 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-
-import javax.naming.Context;
-import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
-
 @RestController
-@RequestMapping("/api/users")
-public class UserController {
+@RequestMapping("/api/auth")
+public class AuthenticateController {
+
+
     private AuthenticationManager authenticationManager;
+
+
     final private UserService userService;
+
     @Autowired
-    public UserController(UserService userService) {
+    public AuthenticateController(UserService userService) {
         this.userService = userService;
     }
 
 
-    @GetMapping
-    @PreAuthorize("hasRole('client-admin')")
-    public ResponseEntity<?> users(@RequestHeader("Authorization") String authorizationHeader){
-        String token = authorizationHeader.replace("Bearer ", "");
-        return userService.users(token);
+
+    @PostMapping("/signin")
+//    @PreAuthorize("hasAnyRole('client-admin')")
+    public Map token(@RequestBody SigninDto signinDto){
+        return userService.signIn(signinDto);
+    }
+
+
+    @PostMapping("/signup")
+//  @PreAuthorize("hasAnyRole('client-admin')")
+    public String signup(@RequestBody SignupDto signupDto){
+        return userService.signup(signupDto);
     }
 
     @GetMapping("/me")
@@ -48,7 +55,4 @@ public class UserController {
         String token = authorizationHeader.replace("Bearer ", "");
         return userService.getUserInfo(token);
     }
-
-
-
 }
