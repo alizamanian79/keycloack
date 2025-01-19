@@ -95,7 +95,7 @@ public class UserService {
             System.out.println("Failed to fetch token.");
             return null;
         }
-        
+
 
         // REST API URL for creating users
         String url = "http://localhost:8080/admin/realms/myrealm/users";
