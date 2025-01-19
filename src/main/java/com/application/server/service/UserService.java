@@ -43,6 +43,9 @@ public class UserService {
     @Value("${keycloack.endpoints.token}")
     private String tokenEndpoint;
 
+    @Value("${keycloack.endpoints.userInfo}")
+    private String userInfoEndpoint;
+
     @Autowired
     private RestTemplate restTemplate;
 
@@ -62,6 +65,7 @@ public class UserService {
         params.add("grant_type", grantType); // Ensure grant type is defined
         params.add("client_id", clientId);
         params.add("client_secret",clientSecret);
+        params.add("scope","openid");
         params.add("username", signinDto.getUsername());
         params.add("password", signinDto.getPassword());
 
@@ -141,6 +145,42 @@ public class UserService {
 
         return null; // Return null if user creation fails
     }
+
+    public ResponseEntity<?> getUserInfo(String token) {
+
+        // REST API URL for creating users
+        String url = userInfoEndpoint;
+        RestTemplate restTemplate = new RestTemplate();
+
+        // Setting up headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON); // JSON for creating users
+        headers.set("Authorization", "Bearer " + token);
+
+        // Wrapping the payload in HttpEntity
+        HttpEntity<Map<String, Object>> request = new HttpEntity<>(headers);
+
+        try {
+            // Sending the POST request
+            ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, request, Map.class);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                System.out.println("User successfully created.");
+                return new ResponseEntity<>(response.getBody(),HttpStatus.OK);
+            } else {
+                System.out.println("Failed to create user: " + response.getBody());
+                return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            // Handle exceptions appropriately
+            System.err.println("Error occurred during signup: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return null; // Return null if user creation fails
+    }
+
+
 
 
 //    public String signIn(SigninDto signinDto) throws IOException {

@@ -55,9 +55,9 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<String> getToken(@RequestHeader("Authorization") String authorizationHeader) {
+    public ResponseEntity<?> getToken(@RequestHeader("Authorization") String authorizationHeader) {
         String token = authorizationHeader.replace("Bearer ", "");
-        return ResponseEntity.ok(token);
+        return userService.getUserInfo(token);
     }
 
 
