@@ -27,7 +27,10 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/auth/signin","/api/auth/signup") // Define public endpoints here
+                        .requestMatchers(
+                                "/api/auth/signin"
+                                ,"/api/auth/signup"
+                        ) // Define public endpoints here
                         .permitAll() // Allow access to public endpoints
                         .anyRequest()
                         .authenticated() // Require authentication for all other requests
