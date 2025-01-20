@@ -29,14 +29,11 @@ public class UserService {
     @Value("${keycloack.client-secret}")
     private String clientSecret;
 
-
     @Value("${keycloack.grant-type}")
     private String grantType;
 
-
     @Value("${keycloack.username}")
     private String username;
-
 
     @Value("${keycloack.password}")
     private String password;
@@ -119,6 +116,8 @@ public class UserService {
         userPayload.put("username", signupDto.getUsername());
         userPayload.put("enabled", signupDto.getEnabled());
         userPayload.put("email", signupDto.getEmail());
+        userPayload.put("firstName", signupDto.getFirstName());
+        userPayload.put("lastName", signupDto.getLastName());
         userPayload.put("credentials", List.of(
                 Map.of(
                         "type", "password",
@@ -249,8 +248,6 @@ public class UserService {
         }
     }
 
-
-    // Return null if user creation fails
 
 
 }

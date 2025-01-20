@@ -18,7 +18,7 @@ keycloack:
   realm: myrealm
   grant-type: password
   client-id: admin-cli
-  client-secret: 3AlxlutPKMpYon2PxwbWGU9jj729G19A
+  client-secret: 9PgOMnCPpLvjlBLCTrbNucN42WPhb5IS
   username: ali
   password: 1234
   ipAddress: http://localhost:8080

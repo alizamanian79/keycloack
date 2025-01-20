@@ -44,4 +44,10 @@ public class UserController {
         return userService.deleteUser(id,token);
     }
 
+    @PostMapping("/update")
+    @PreAuthorize("hasAnyRole('client-user')")
+    public String updateUser() {
+       return "Hellow";
+    }
+
 }
