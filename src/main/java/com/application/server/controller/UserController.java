@@ -1,6 +1,7 @@
 package com.application.server.controller;
 
 
+import com.application.server.dto.keycloackDto.SignupDto;
 import com.application.server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,9 @@ public class UserController {
         return userService.users(token);
     }
 
+
     @GetMapping("/me")
+    @PreAuthorize("hasAnyRole('client-user','default-roles-myrealm')")
     public ResponseEntity<?> getToken(@RequestHeader("Authorization") String authorizationHeader) {
         String token = authorizationHeader.replace("Bearer ", "");
         return userService.getUserInfo(token);
@@ -45,9 +48,9 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    @PreAuthorize("hasAnyRole('client-user')")
-    public String updateUser() {
-       return "Hellow";
+    @PreAuthorize("hasAnyRole('client-user','default-roles-myrealm')")
+    public String updateUser(@RequestHeader("Authorization") String authorizationHeader, SignupDto signupDto) {
+       return userService.updateUser()
     }
 
 }
